@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Boats</string>
+    <string name="uploadImage">Upload Image</string>
+    <string name="analyze_image">Image to Analyze</string>
+    <string name="changeImage">Change Image</string>
+    <string name="finish">Finish Analysis</string>
+    <string name="catchAnalysis">Catch Analysis</string>
+</resources>
