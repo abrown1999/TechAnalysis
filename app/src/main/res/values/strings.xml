@@ -5,9 +5,9 @@
     <string name="changeImage">Change Image</string>
     <string name="finish">Finish Analysis</string>
     <string name="catchAnalysis">Catch Analysis</string>
-    <string name="ankle">Click the ankle joint</string>
-    <string name="knee">Click the knee cap</string>
-    <string name="hip">Click the hip</string>
-    <string name="shoulder">Click the shoulder</string>
+    <string name="knee">Drag the dot to the knee cap</string>
+    <string name="hip">Drag the dot to the hip</string>
+    <string name="shoulder">Drag the dot to the shoulder</string>
     <string name="set">set</string>
+    <string name="dotCreate">Create a Dot</string>
 </resources>
