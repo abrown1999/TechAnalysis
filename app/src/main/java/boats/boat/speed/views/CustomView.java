@@ -5,18 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.graphics.drawable.shapes.OvalShape;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import boats.boat.speed.R;
 
 public class CustomView extends View {
 
     private Paint mPaintCircle;
-    private OvalShape mOvalShape;
-    private int mCircleeColor;
     private float mcircleX, mcircleY;
     private float mcircleRadius = 50f;
 
@@ -28,19 +24,16 @@ public class CustomView extends View {
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
-
     }
 
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
-
     }
 
     public CustomView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs);
-
     }
 
     private void init(@Nullable AttributeSet set) {
@@ -49,9 +42,7 @@ public class CustomView extends View {
         mPaintCircle.setColor(Color.BLUE);
         if (set == null)
             return;
-
         TypedArray ta = getContext().obtainStyledAttributes(set, new int[]{2130772129, 2130772130});
-
         ta.recycle();
     }
 
@@ -71,25 +62,24 @@ public class CustomView extends View {
         System.out.println("idk whats going on");
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+                System.out.println("DOWN");
                 return true;
             }
             case MotionEvent.ACTION_MOVE    : {
                 System.out.println("should be following");
                 float x = event.getX();
                 float y = event.getY();
-
-                double dx = Math.pow(x - mcircleX, 2);
-                double dy = Math.pow(x - mcircleY, 2);
-                if (dx + dy < Math.pow(mcircleRadius, 2)) {
+                System.out.println("x location: " + x + ", y location: " + y);
+                if (x > mcircleX + mcircleRadius && x < mcircleX - mcircleRadius && y >
+                        mcircleY + mcircleRadius && y < mcircleY - mcircleRadius) {
                     mcircleX = x;
                     mcircleY = y;
                     postInvalidate();
                     return true;
                 }
-                return value;
-
             }
         }
+
         return value;
     }
 }
