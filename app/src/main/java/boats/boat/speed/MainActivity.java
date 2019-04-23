@@ -4,7 +4,6 @@ package boats.boat.speed;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,20 +11,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int SELECT_PICTURE = 1;
     private CustomView mCustomView;
+    private Analysis analysis;
     private String selectedImagePath;
     private ImageView img;
     Context context = this;
+    public float[][] indexes;
+    private String catchOrFinish;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,55 +41,167 @@ public class MainActivity extends AppCompatActivity {
                         intent.setType("image/*");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
                         findViewById(R.id.uploadImage).setVisibility(View.INVISIBLE);
-                        findViewById(R.id.setButton).setVisibility(View.VISIBLE);
                         mCustomView = findViewById(R.id.customViewDad);
                         mCustomView.setVisibility(View.VISIBLE);
                         mCustomView.setBackgroundColor(Color.TRANSPARENT);
                         startActivityForResult(Intent.createChooser(intent,"Select Picture"), SELECT_PICTURE);
                         findViewById(R.id.catchButton).setVisibility(View.VISIBLE);
                         findViewById(R.id.finishButton).setVisibility(View.VISIBLE);
-                        findViewById(R.id.dotCreate).setVisibility(View.VISIBLE);
+                        findViewById(R.id.manipulatePhoto).setVisibility(View.VISIBLE);
                     }
                 });
-
-        findViewById(R.id.dotCreate).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.manipulatePhoto).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCustomView.setCreate(true);
-                mCustomView.drawCirclePlease();
+                promptUser("edit");
+                findViewById(R.id.manipulatePhoto).setVisibility(View.INVISIBLE);
             }
         });
 
-        Button setButton = findViewById(R.id.setButton);
-        setButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.setButtonPurple).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCustomView.setSecure(true);
+                mCustomView.setSecureB(true);
+                findViewById(R.id.setButtonPurple).setVisibility(View.INVISIBLE);
             }
         });
-
+        findViewById(R.id.setButtonRed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCustomView.setSecureR(true);
+                findViewById(R.id.setButtonRed).setVisibility(View.INVISIBLE);
+            }
+        });
+        findViewById(R.id.setButtonGreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCustomView.setSecureG(true);
+                findViewById(R.id.setButtonGreen).setVisibility(View.INVISIBLE);
+            }
+        });
+        findViewById(R.id.setButtonYellow).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCustomView.setSecureY(true);
+                findViewById(R.id.catchEx).setVisibility(View.INVISIBLE);
+                findViewById(R.id.finishEx).setVisibility(View.INVISIBLE);
+                findViewById(R.id.setButtonYellow).setVisibility(View.INVISIBLE);
+                findViewById(R.id.drawLines).setVisibility(View.VISIBLE);
+            }
+        });
         findViewById(R.id.catchButton).setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
-                promptUser("kneePrompt");
+                promptUser("regular");
+                findViewById(R.id.setButtonPurple).setVisibility(View.VISIBLE);
+                findViewById(R.id.setButtonGreen).setVisibility(View.VISIBLE);
+                findViewById(R.id.setButtonRed).setVisibility(View.VISIBLE);
+                findViewById(R.id.setButtonYellow).setVisibility(View.VISIBLE);
+                findViewById(R.id.catchEx).setVisibility(View.VISIBLE);
+                findViewById(R.id.catchButton).setVisibility(View.INVISIBLE);
+                findViewById(R.id.finishButton).setVisibility(View.INVISIBLE);
+                findViewById(R.id.manipulatePhoto).setVisibility(View.INVISIBLE);
+                catchOrFinish = "catch";
+                mCustomView.setCreate(true);
+            }
+        });
+
+        findViewById(R.id.finishButton).setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+                promptUser("regular");
+                findViewById(R.id.setButtonPurple).setVisibility(View.VISIBLE);
+                findViewById(R.id.setButtonGreen).setVisibility(View.VISIBLE);
+                findViewById(R.id.setButtonRed).setVisibility(View.VISIBLE);
+                findViewById(R.id.setButtonYellow).setVisibility(View.VISIBLE);
+                findViewById(R.id.finishEx).setVisibility(View.VISIBLE);
+                findViewById(R.id.finishButton).setVisibility(View.INVISIBLE);
+                findViewById(R.id.catchButton).setVisibility(View.INVISIBLE);
+                findViewById(R.id.manipulatePhoto).setVisibility(View.INVISIBLE);
+                catchOrFinish = "finish";
+                mCustomView.setCreate(true);
+            }
+        });
+        findViewById(R.id.drawLines).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCustomView.drawLines();
+                findViewById(R.id.drawLines).setVisibility(View.INVISIBLE);
+                findViewById(R.id.analysisStart).setVisibility(View.VISIBLE);
+            }
+        });
+        findViewById(R.id.analysisStart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                indexes = getDotIndexes();
+                analysis = new Analysis(indexes);
+                if (catchOrFinish.equals("catch")) {
+                    if (analysis.shinsVertical()) {
+                        promptUser("shin");
+                    } else {
+                        promptUser("antishin");
+                    }
+                    if (analysis.bodyAngle() <= -1) {
+                        promptUser("goodForWardBodyAngle");
+                    } else {
+                        promptUser("notEnoughForwardBodyAngle");
+                    }
+                } else {
+                    if (analysis.bodyAngle() == 1) {
+                        promptUser("layback");
+                    } else if (analysis.bodyAngle() <= -1) {
+                        promptUser("notEnough");
+                    } else if (analysis.bodyAngle() >= 1){
+                        promptUser("tooMuch");
+                    }
+                }
             }
         });
     }
 
+    public float[][] getDotIndexes() {
+        indexes = mCustomView.getIndexes();
+        return mCustomView.getIndexes();
+    }
 
-    public void promptUser(String promptToShow) {
+    public void promptUser(String prompt) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptsView = layoutInflater.inflate(R.layout.prompts, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(promptsView);
-        if (promptToShow.equals("kneePrompt")) {
-            promptsView.findViewById(R.id.kneePrompt).setVisibility(View.VISIBLE);
-        } else if (promptToShow.equals("hipPrompt")) {
-            promptsView.findViewById(R.id.hipPrompt).setVisibility(View.VISIBLE);
-
-        } else if (promptToShow.equals("shoulerPrompt")) {
-            promptsView.findViewById(R.id.shoulerPrompt).setVisibility(View.VISIBLE);
-
+        if (prompt.equals("regular")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.VISIBLE);
         }
+        if (prompt.equals("shin")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.shinPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("antishin")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.antiShinPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("layback")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.laybackPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("notEnough")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.antiLaybackPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("tooMuch")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.contraLaybackPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("goodForWardBodyAngle")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.compressionPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("notEnoughForwardBodyAngle")) {
+            promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
+            promptsView.findViewById(R.id.anticompressionPrompt).setVisibility(View.VISIBLE);
+        }
+        if (prompt.equals("edit")) {
+            View editView = layoutInflater.inflate(R.layout.image_edit, null);
+        }
+
+        builder.setView(promptsView);
         builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -97,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {

@@ -12,16 +12,11 @@ import android.view.View;
 
 public class CustomView extends View {
 
-    private Paint mPaintCircle;
-    private float mcircleX, mcircleY;
+    private Paint mPaintCircleB, mPaintCircleR, mPaintCircleG, mPaintCircleY, mPaintCircleDefault;
     private float mcircleRadius = 50f;
-    public boolean secure = false;
-    public boolean create = false;
-    private float xHold, yHold;
-    private float x, y;
-
-    //Circle mCircle;
-
+    public boolean create, secureB, secureR, secureG, secureY, lineDraw = false;
+    private float mcircleX, mcircleY, xHoldB, yHoldB, xHoldR, yHoldR, xHoldG, yHoldG, xHoldY, yHoldY, x, y;
+    private float[][] indexes = new float[4][2];
 
     public CustomView(Context context) {
         super(context);
@@ -43,22 +38,65 @@ public class CustomView extends View {
         init(attrs);
     }
 
-    public void setSecure(Boolean boo) {
-        secure = boo;
-        xHold = x;
-        yHold = y;
-        System.out.println(secure + "SECUREEEDDDDD");
+    public void setSecureB(Boolean boo) {
+        secureB = boo;
+        xHoldB = x;
+        yHoldB = y;
+        indexes[2][0] = x;
+        indexes[2][1] = y;
+    }
+
+    public void setSecureR(Boolean boo) {
+        secureR = boo;
+        xHoldR = x;
+        yHoldR = y;
+        indexes[0][0] = x;
+        indexes[0][1] = y;
+    }
+    public void setSecureG(Boolean boo) {
+        secureG = boo;
+        xHoldG = x;
+        yHoldG = y;
+        indexes[1][0] = x;
+        indexes[1][1] = y;
+    }
+    public void setSecureY(Boolean boo) {
+        secureY = boo;
+        xHoldY = x;
+        yHoldY = y;
+        indexes[3][0] = x;
+        indexes[3][1] = y;
+    }
+
+    public float[][] getIndexes() {
+        return indexes;
     }
 
     public void setCreate(Boolean boo) {
         create = boo;
-        System.out.println(create);
+    }
+
+    public void drawLines() {
+        lineDraw = true;
+        postInvalidate();
     }
 
     private void init(@Nullable AttributeSet set) {
-        mPaintCircle = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaintCircle.setAntiAlias(true);
-        mPaintCircle.setColor(Color.BLUE);
+        mPaintCircleDefault = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCircleDefault.setAntiAlias(true);
+        mPaintCircleDefault.setColor(Color.BLACK);
+        mPaintCircleB = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCircleB.setAntiAlias(true);
+        mPaintCircleB.setColor(Color.rgb(109, 124, 246));
+        mPaintCircleR = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCircleR.setAntiAlias(true);
+        mPaintCircleR.setColor(Color.rgb(255, 79, 79));
+        mPaintCircleG = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCircleG.setAntiAlias(true);
+        mPaintCircleG.setColor(Color.rgb(54, 204, 47));
+        mPaintCircleY = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintCircleY.setAntiAlias(true);
+        mPaintCircleY.setColor(Color.rgb(255, 255, 78));
         if (set == null)
             return;
         TypedArray ta = getContext().obtainStyledAttributes(set, new int[]{2130772129, 2130772130});
@@ -67,36 +105,45 @@ public class CustomView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mcircleX == 0f || mcircleY == 0f) {
-            mcircleX = getWidth() / 2;
-            mcircleY = getHeight() / 2;
+        if (lineDraw) {
+            drawThiccAssLines(canvas);
+            System.out.println("indexes in CustomView onDraw");
+            for (int i = 0; i < indexes.length; i++) {
+                System.out.println(((int) indexes[i][0]) + " " + ((int) indexes[i][1]));
+            }
         }
         if (create) {
-            canvas.drawCircle(mcircleX, mcircleY, mcircleRadius, mPaintCircle);
-            System.out.println("drawn");
+            canvas.drawCircle(mcircleX, mcircleY, mcircleRadius, mPaintCircleDefault);
         }
-        if (!secure && xHold != 0 && yHold != 0) {
-            System.out.println("drawing circle holded");
-            canvas.drawCircle(xHold, yHold, mcircleRadius, mPaintCircle);
+        if (xHoldB != 0 && yHoldB != 0) {
+            canvas.drawCircle(xHoldB, yHoldB, mcircleRadius, mPaintCircleB);
         }
-        /*System.out.println("mCircle is: " + mCircle);
-        if (mCircle != null) {
-            canvas.drawCircle(mCircle.cx, mCircle.cy, mCircle.radius, mPaintCircle);
-            System.out.println("circle drawn!!");
-        }*/
+        if (xHoldR != 0 && yHoldR != 0) {
+            canvas.drawCircle(xHoldR, yHoldR, mcircleRadius, mPaintCircleR);
+        }
+        if (xHoldG != 0 && yHoldG != 0) {
+            canvas.drawCircle(xHoldG, yHoldG, mcircleRadius, mPaintCircleG);
+        }
+        if (xHoldY != 0 && yHoldY != 0) {
+            canvas.drawCircle(xHoldY, yHoldY, mcircleRadius, mPaintCircleY);
+        }
     }
 
-    public void drawCirclePlease() {
-        //mCircle = new Circle();
-        System.out.println("created a dot");
-        secure = false;
+    private void drawThiccAssLines(Canvas canvas) {
+        Paint paintColor = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintColor.setAntiAlias(true);
+        paintColor.setColor(Color.rgb(255, 212, 128));
+        for (float i = -mcircleRadius / 2; i < mcircleRadius / 2; i++) {
+            canvas.drawLine(indexes[0][0] + i, indexes[0][1] + i, indexes[1][0] + i, indexes[1][1] + i, paintColor);
+            canvas.drawLine(indexes[1][0] + i, indexes[1][1] + i, indexes[2][0] + i, indexes[2][1] + i, paintColor);
+            canvas.drawLine(indexes[2][0] + i, indexes[2][1] + i, indexes[3][0] + i, indexes[3][1] + i, paintColor);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean value = super.onTouchEvent(event);
-        if (!secure) {
-            System.out.println("move dot");
+        if (!secureB) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     return true;
@@ -111,33 +158,52 @@ public class CustomView extends View {
                 }
             }
         }
+        if (!secureR) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    return true;
+                }
+                case MotionEvent.ACTION_MOVE: {
+                    x = event.getX();
+                    y = event.getY();
+                    mcircleX = x;
+                    mcircleY = y;
+                    postInvalidate();
+                    return true;
+                }
+            }
+        }
+        if (!secureG) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    return true;
+                }
+                case MotionEvent.ACTION_MOVE: {
+                    x = event.getX();
+                    y = event.getY();
+                    mcircleX = x;
+                    mcircleY = y;
+                    postInvalidate();
+                    return true;
+                }
+            }
+        }
+        if (!secureY) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    return true;
+                }
+                case MotionEvent.ACTION_MOVE: {
+                    x = event.getX();
+                    y = event.getY();
+                    mcircleX = x;
+                    mcircleY = y;
+                    mPaintCircleDefault = mPaintCircleY;
+                    postInvalidate();
+                    return true;
+                }
+            }
+        }
         return value;
     }
-/*
-    class Circle {
-        float cx;
-        float cy;
-        float radius;
-
-        Circle(float setcx, float setcy, float setradius) {
-            cx = setcx;
-            cy = setcy;
-            radius = setradius;
-        }
-        Circle() {
-        }
-
-        public void onClick(View v) {
-            System.out.println("something is happening here");
-            if (mCircle == null) {
-                mCircle = new Circle(cx, cy, radius);
-            }
-            mCircle.cx = 50;
-            mCircle.cy = 50;
-            mCircle.radius = 50;
-            // This will call onDraw() method under the hood.
-            invalidate();
-        }
-    }
-    */
 }
