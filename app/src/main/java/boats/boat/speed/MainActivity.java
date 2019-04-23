@@ -11,11 +11,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
@@ -166,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View promptsView = layoutInflater.inflate(R.layout.prompts, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
         if (prompt.equals("regular")) {
             promptsView.findViewById(R.id.circlePrompt).setVisibility(View.VISIBLE);
         }
@@ -197,9 +196,6 @@ public class MainActivity extends AppCompatActivity {
             promptsView.findViewById(R.id.circlePrompt).setVisibility(View.INVISIBLE);
             promptsView.findViewById(R.id.anticompressionPrompt).setVisibility(View.VISIBLE);
         }
-        if (prompt.equals("edit")) {
-            View editView = layoutInflater.inflate(R.layout.image_edit, null);
-        }
 
         builder.setView(promptsView);
         builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
@@ -210,8 +206,14 @@ public class MainActivity extends AppCompatActivity {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+        if (prompt.equals("edit"))
+            startEditMode();
     }
 
+    private void startEditMode() {
+        Intent intention = new Intent(this, EditImage.class);
+        startActivity(intention);
+    }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {

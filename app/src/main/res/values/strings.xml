@@ -35,4 +35,5 @@
     <string name="close">Close</string>
     <string name="imageWebsite">Open Image from Url</string>
     <string name="edit">Edit Photo</string>
+    <string name="title_activity_edit_image">EditImage</string>
 </resources>

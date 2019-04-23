@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".EditImage">
 
     <ImageButton
         android:id="@+id/shiftLeft"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="595dp"
         android:layout_marginBottom="27dp"
         android:contentDescription="@string/left"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toStartOf="@+id/shiftDown"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/left" />
 
     <ImageButton
@@ -30,17 +30,18 @@
         app:layout_constraintEnd_toStartOf="@+id/shiftRight"
         app:layout_constraintStart_toEndOf="@+id/shiftLeft"
         app:layout_constraintTop_toBottomOf="@+id/shiftUp"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/down" />
 
     <ImageButton
         android:id="@+id/shiftUp"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="573dp"
+        android:layout_marginTop="572dp"
         android:contentDescription="@string/up"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/shiftDown"
         app:layout_constraintEnd_toStartOf="@+id/shiftRight"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/shiftLeft"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/up" />
@@ -50,7 +51,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="595dp"
         android:layout_marginEnd="261dp"
         android:layout_marginBottom="27dp"
         android:contentDescription="@string/right"
@@ -58,7 +58,6 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/shiftLeft"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/right" />
 
     <LinearLayout
@@ -92,7 +91,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/zoomOut"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/notZoomOut" />
+                app:srcCompat="@drawable/zoom_in" />
 
             <ImageButton
                 android:id="@+id/zoomOut"
@@ -104,7 +103,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/takePhoto"
                 app:layout_constraintStart_toEndOf="@+id/zoomIn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/zoomOut" />
+                app:srcCompat="@drawable/zoom_out" />
 
             <ImageButton
                 android:id="@+id/takePhoto"
@@ -154,7 +153,7 @@
                 app:layout_constraintStart_toEndOf="@+id/downloadFile"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.285"
-                app:srcCompat="@drawable/flipHoriz" />
+                app:srcCompat="@drawable/flip_horiz" />
 
             <ImageButton
                 android:id="@+id/save"
@@ -180,6 +179,5 @@
                 app:srcCompat="@drawable/closer" />
 
         </android.support.constraint.ConstraintLayout>
-
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
