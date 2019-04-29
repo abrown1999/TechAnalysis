@@ -1,9 +1,9 @@
 package boats.boat.speed;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -53,6 +53,7 @@ public class CustomView extends View {
         indexes[0][0] = x;
         indexes[0][1] = y;
     }
+
     public void setSecureG(Boolean boo) {
         secureG = boo;
         xHoldG = x;
@@ -60,6 +61,7 @@ public class CustomView extends View {
         indexes[1][0] = x;
         indexes[1][1] = y;
     }
+
     public void setSecureY(Boolean boo) {
         secureY = boo;
         xHoldY = x;
@@ -107,10 +109,6 @@ public class CustomView extends View {
     protected void onDraw(Canvas canvas) {
         if (lineDraw) {
             drawThiccAssLines(canvas);
-            System.out.println("indexes in CustomView onDraw");
-            for (int i = 0; i < indexes.length; i++) {
-                System.out.println(((int) indexes[i][0]) + " " + ((int) indexes[i][1]));
-            }
         }
         if (create) {
             canvas.drawCircle(mcircleX, mcircleY, mcircleRadius, mPaintCircleDefault);

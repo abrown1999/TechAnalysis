@@ -19,7 +19,6 @@
     <string name="goodlayback">Good layback</string>
     <string name="notgoodLayback">Not enough layback</string>
     <string name="toofarr">Too much layback</string>
-    <string name="compress">Good compression/reach at the catch</string>
     <string name="notenoughComprss">Not enough compression/reach at the catch</string>
     <string name="toocompress">Too much compression</string>
     <string name="up">Up</string>
@@ -36,4 +35,8 @@
     <string name="imageWebsite">Open Image from Url</string>
     <string name="edit">Edit Photo</string>
     <string name="title_activity_edit_image">EditImage</string>
+    <string name="compress">Good compression/reach at the catch</string>
+    <string name="logo">logoo</string>
+    <string name="advice">advice</string>
+    <string name="feedback">feedback</string>
 </resources>
