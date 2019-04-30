@@ -8,7 +8,10 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
         final TextView instruction = findViewById(R.id.instruction);
+        final Button catchButton = findViewById(R.id.catchButton);
+        final Button finishButton = findViewById(R.id.finishButton);
+        final LinearLayout techBar = findViewById(R.id.tech_bar);
+        final LinearLayout colorBar = findViewById(R.id.color_buttons);
+        final LinearLayout endBar = findViewById(R.id.end_analysis_bar);
+        instruction.setText("Click the camera icon to begin");
         //sets image to uploaded image
         img = findViewById(R.id.imageView);
         final ImageView takePictureButton = findViewById(R.id.camera);
@@ -42,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 instruction.setText("Decide which part of the stroke you would like to analyze");
             }
         });
-        findViewById(R.id.catchButton).setOnClickListener(new OnClickListener() {
+        catchButton.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 instruction.setText("Drag and select the colors in the order they appear");
                 findViewById(R.id.color_buttons).setVisibility(View.VISIBLE);
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 mCustomView.setCreate(true);
             }
         });
-        findViewById(R.id.finishButton).setOnClickListener(new OnClickListener() {
+        finishButton.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 instruction.setText("Drag and select the colors in the order they appear");
                 findViewById(R.id.color_buttons).setVisibility(View.VISIBLE);
@@ -124,13 +133,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 if (analysis.bodyAngle() == 1) {
-                    feedbackB.setText("Good layback");
+                    feedbackB.setText("Good body angle");
                 } else if (analysis.bodyAngle() < 1) {
-                    feedbackB.setText("Not enough layback");
+                    feedbackB.setText("Not body pivot");
                 } else if (analysis.bodyAngle() > 1) {
                     feedbackB.setText("Too much layback");
                 }
                 findViewById(R.id.analysisStart).setVisibility(View.INVISIBLE);
+                instruction.setText("To restart, click the camera icon");
+            }
+        });
+        findViewById(R.id.restartButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endBar.setVisibility(View.INVISIBLE);
+                openGallery();
+                mCustomView = findViewById(R.id.customViewDad);
+                mCustomView.setVisibility(View.VISIBLE);
+                mCustomView.setBackgroundColor(Color.TRANSPARENT);
+                findViewById(R.id.tech_bar).setVisibility(View.VISIBLE);
+                instruction.setText("Decide which part of the stroke you would like to analyze");
             }
         });
     }

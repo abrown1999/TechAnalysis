@@ -39,4 +39,5 @@
     <string name="logo">logoo</string>
     <string name="advice">advice</string>
     <string name="feedback">feedback</string>
+    <string name="restart">Restart</string>
 </resources>
